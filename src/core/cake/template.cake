@@ -81,6 +81,7 @@ void PackerTemplate_Restore(PackerTemplate template) {
   PackerTemplate_MergeJson(template);
 
   PackerTemplate_Packer(template, "validate template.json");
+
 }
 
 void PackerTemplate_Build(PackerTemplate template) {
@@ -246,17 +247,20 @@ void PackerTemplate_MergeDirectories(PackerTemplate template) {
           CopyFiles(builderDirectory + "/**/*", targetDirecory, true);
         }
       }
+      if(template.Provisioners != null)
+      {
+        foreach (var provisioner in template.Provisioners) {
 
-      foreach (var provisioner in template.Provisioners) {
-        foreach (var provisionerDirectory in PackerTemplate_GetDirectories(sourceDirectory + "/packer/provisioners/*")) {
-          var provisionerDirectoryName = provisionerDirectory.GetDirectoryName();
-          if (!provisioner.IsMatching(provisionerDirectoryName)) {
-            continue;
+          foreach (var provisionerDirectory in PackerTemplate_GetDirectories(sourceDirectory + "/packer/provisioners/*")) {
+            var provisionerDirectoryName = provisionerDirectory.GetDirectoryName();
+            if (!provisioner.IsMatching(provisionerDirectoryName)) {
+              continue;
+            }
+
+            var targetDirecory = template.GetBuildDirectory() + "/provisioners/" + provisioner.Name;
+            EnsureDirectoryExists(targetDirecory);
+            CopyFiles(provisionerDirectory + "/**/*", targetDirecory, true);
           }
-
-          var targetDirecory = template.GetBuildDirectory() + "/provisioners/" + provisioner.Name;
-          EnsureDirectoryExists(targetDirecory);
-          CopyFiles(provisionerDirectory + "/**/*", targetDirecory, true);
         }
       }
 
@@ -280,7 +284,7 @@ void PackerTemplate_MergeDirectories(PackerTemplate template) {
   var buildDirectory = MakeAbsolute(Directory("./"));
   foreach (var policyFile in GetFiles(template.GetBuildDirectory() + "/**/Policyfile.rb")) {
       var policyPath = "./" + buildDirectory.GetRelativePath(policyFile);
-      
+
       PackerTemplate_Chef(template, "install " + policyPath);
       PackerTemplate_Chef(template, "export " + File(policyPath).Path.GetDirectory() + "/Policyfile.lock.json " + File(policyPath).Path.GetDirectory() + "/upload");
   }
@@ -310,6 +314,7 @@ void PackerTemplate_MergeJson(PackerTemplate template) {
       var parentBuildOutputFile = File(parentBuildDirectory + "/" + manifest["builds"][0]["files"][1]["name"].ToString());
       jsonTemplateVariables["virtualbox_source_path"] = buildDirectory.GetRelativePath(parentBuildOutputFile).ToString();
     }
+
     if (template.Builders.Any(item => item.IsMatching("hyperv"))) {
       var parentBuildOutputDirectory = parentBuildDirectory + "/output/build";
       jsonTemplateVariables["hyperv_clone_from_vmcx_path"] = parentBuildOutputDirectory;
@@ -321,7 +326,7 @@ void PackerTemplate_MergeJson(PackerTemplate template) {
   }
   var descriptions = new List<string>();
   var runList = new List<string>();
-  
+
   foreach (var component in template.Components) {
     if (parent == null || !parent.Components.Any(item => item.Name == component.Name)) {
       runList.Add(component.Name);
@@ -353,16 +358,18 @@ void PackerTemplate_MergeJson(PackerTemplate template) {
           }
         }
       }
+      if( template.Provisioners != null)
+      {
+        foreach (var provisioner in template.Provisioners) {
+          foreach (var provisionerDirectory in PackerTemplate_GetDirectories(sourceDirectory + "/packer/provisioners/*")) {
+            var provisionerDirectoryName = provisionerDirectory.GetDirectoryName();
+            if (!provisioner.IsMatching(provisionerDirectoryName)) {
+              continue;
+            }
 
-      foreach (var provisioner in template.Provisioners) {
-        foreach (var provisionerDirectory in PackerTemplate_GetDirectories(sourceDirectory + "/packer/provisioners/*")) {
-          var provisionerDirectoryName = provisionerDirectory.GetDirectoryName();
-          if (!provisioner.IsMatching(provisionerDirectoryName)) {
-            continue;
-          }
-
-          foreach (var file in GetFiles(provisionerDirectory + "/" + jsonFileName)) {
-            json.Merge(ParseJsonFromFile(file));
+            foreach (var file in GetFiles(provisionerDirectory + "/" + jsonFileName)) {
+              json.Merge(ParseJsonFromFile(file));
+            }
           }
         }
       }
@@ -410,7 +417,7 @@ void PackerTemplate_Packer(PackerTemplate template, string arguments) {
     Arguments = arguments,
     WorkingDirectory = template.GetBuildDirectory()
   });
-  
+
   if (result != 0) {
     throw new Exception("Process exited with code " + result + ".");
   }
@@ -421,13 +428,13 @@ void PackerTemplate_Vagrant(PackerTemplate template, string arguments, string vm
 
   var result = StartProcess("vagrant", new ProcessSettings {
     Arguments = arguments,
-    EnvironmentVariables = new Dictionary<string, string> { 
+    EnvironmentVariables = new Dictionary<string, string> {
       { "VAGRANT_VM_NAME", vmName },
       { "VAGRANT_BOX_NAME", boxName },
       { "VAGRANT_BOX_URL", boxUrl },
     }
   });
-  
+
   if (result != 0) {
     throw new Exception("Process exited with code " + result + ".");
   }
@@ -439,7 +446,7 @@ void PackerTemplate_Chef(PackerTemplate template, string arguments) {
   var result = StartProcess("chef", new ProcessSettings {
     Arguments = arguments
   });
-  
+
   if (result != 0) {
     throw new Exception("Process exited with code " + result + ".");
   }

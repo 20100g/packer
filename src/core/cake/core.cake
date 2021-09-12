@@ -1,5 +1,7 @@
 #load "./template.cake"
 
+// Install Cake.CoreCLR as a Cake Tool
+#tool nuget:?package=Cake.CoreCLR&version=1.1.0
 #addin "nuget:?package=Cake.FileHelpers&version=4.0.1"
 #addin "nuget:?package=Cake.Json&version=6.0.1"
 #addin "nuget:?package=Newtonsoft.Json&version=12.0.2"
@@ -34,7 +36,7 @@ IEnumerable<PackerTemplate> PackerTemplates_CreateWindows(string name, string gr
     name,
     "hyperv-core",
     new [] { PackerBuilder_Create(parents == null ? "hyperv-iso" : "hyperv-vmcx") },
-    new [] { PackerProvisioner_Create("chef") },
+    null, //new [] { PackerProvisioner_Create("chef") },
     new [] { PackerPostProcessor_Create("manifest") },
     parents != null ? parents.First(item => item.IsMatching("hyperv-core")) : null
   );

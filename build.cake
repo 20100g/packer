@@ -95,7 +95,11 @@ var u1804d = PackerTemplates_CreateLinux(
   "ubuntu-desktop-xfce-lts",
   $"1804.0.{version}"
 );
-
+var ws2019sfrca = PackerTemplates_CreateWindows(
+  "ws2019sfrca",
+  "windows-server-standard-fr",
+  $"1809.0.{version}"
+);
 var ws2019s_de = PackerTemplates_CreateWindows(
   "ws2019s-de",
   "docker-windows-enterprise-windows-server",

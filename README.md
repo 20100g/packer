@@ -1,6 +1,6 @@
 # Packer
 
-**Contents** [TL;DR] | [Overview] | [Getting started] | [Usage] | [Next steps] | [Contributing] | [Resources]  
+**Contents** [TL;DR] | [Overview] | [Getting started] | [Usage] | [Next steps] | [Contributing] | [Resources]
 
 This repository contains common [Packer] helper tools and sample templates for [Docker], [IIS], [SQL Server] and [Visual Studio] on [Windows] and [Ubuntu], building virtual machine images and [Vagrant] boxes for [VirtualBox], [Hyper-V], [Azure] and [AWS], provisioned with [Chef].
 
@@ -14,9 +14,9 @@ This repository contains common [Packer] helper tools and sample templates for [
 
 ## Overview
 
-**Contents** [Operating systems] | [Hosting] | [Development]  
+**Contents** [Operating systems] | [Hosting] | [Development]
 
-> **Note** This section covers the details of the published [Vagrant boxes] this repository builds. See the [Getting started] section to build your own virtual machine images. See [virtual workstations] for samples of automating the configuration of your development environments using them and [these][BlogWhy] [blogs][BlogHow] for more background and motivation.  
+> **Note** This section covers the details of the published [Vagrant boxes] this repository builds. See the [Getting started] section to build your own virtual machine images. See [virtual workstations] for samples of automating the configuration of your development environments using them and [these][BlogWhy] [blogs][BlogHow] for more background and motivation.
 
 This repository contains [Packer] sample template for the following virtualization scenarios:
 
@@ -27,7 +27,7 @@ This repository contains [Packer] sample template for the following virtualizati
 The virtual machine images and [Vagrant] boxes are built for [VirtualBox], [Hyper-V], [Azure] and [AWS], and are provisioned using [Chef].
 
 > **Note** All the components, including the core operating systems, share the following characteristics:
-> 
+>
 > * They are based on their publicly available versions. You might need to provide your own license(s) (for example, a valid Windows or Visual Studio license) to start or keep using them after their evaluation periods expire.
 > * They are installed using their latest available versions. The latest patches (for example, all the Windows Updates) are applied as well.
 > * Unless noted otherwise, they are installed using the default configuration options.
@@ -215,9 +215,9 @@ The following Vagrant boxes can be used for development scenarios including sett
 
 ## Getting started
 
-> **Note** The rest of this document covers the details of building virtual machine images and Vagrant boxes, and assumes that you are familiar with the basics of [Packer] and [Vagrant]. If that's not the case, it's recommended that you take a quick look at the [getting][PackerGettingStarted] [started][VagrantGettingStarted] guides.  
+> **Note** The rest of this document covers the details of building virtual machine images and Vagrant boxes, and assumes that you are familiar with the basics of [Packer] and [Vagrant]. If that's not the case, it's recommended that you take a quick look at the [getting][PackerGettingStarted] [started][VagrantGettingStarted] guides.
 
-> **Note** Building the Packer templates have been tested on Windows hosts only, but they are supposed to run on any other platform as well, given that the actual virtualization provider (e.g. VirtualBox) supports it. [Let me know][Contributing] if you encounter any issues and I'm glad to help.  
+> **Note** Building the Packer templates have been tested on Windows hosts only, but they are supposed to run on any other platform as well, given that the actual virtualization provider (e.g. VirtualBox) supports it. [Let me know][Contributing] if you encounter any issues and I'm glad to help.
 
 Follow the steps below to install the required tools:
 
@@ -230,7 +230,7 @@ Follow the steps below to install the required tools:
 
 You are now ready to build a virtual machine image and a Vagrant box.
 
-> **Note** It is recommended to set up [caching for Packer][PackerCaching], so you can reuse the downloaded resources (e.g. OS ISOs) across different builds. Make sure you have a bunch of free disk space for the cache and the build artifacts.  
+> **Note** It is recommended to set up [caching for Packer][PackerCaching], so you can reuse the downloaded resources (e.g. OS ISOs) across different builds. Make sure you have a bunch of free disk space for the cache and the build artifacts.
 
 [Getting started]: #getting-started
 
@@ -299,7 +299,7 @@ You can filter this further to list only the templates for a given virtual machi
 $ dotnet cake [--target=info] --configuration=ws2019s
 ```
 
-You can use this filtering with all the `dotnet cake` commands below as well. It selects all the templates which contain the specified argument as a substring, so you can filter for components (`ws2019s`, `w102101e`, `iis`, etc.) or providers (`virtualbox`, `hyperv`) easily.  
+You can use this filtering with all the `dotnet cake` commands below as well. It selects all the templates which contain the specified argument as a substring, so you can filter for components (`ws2019s`, `w102101e`, `iis`, etc.) or providers (`virtualbox`, `hyperv`) easily.
 
 The output will contain only the matching templates:
 
@@ -321,7 +321,7 @@ Now, invoke the `restore` command with the name of the template you want to buil
 
 ```shell
 $ dotnet cake --target=restore --configuration=ws2019s-virtualbox-core
-``` 
+```
 
 This will create the folder `build/ws2019s/virtualbox-core` in the root of your clone with all the files required to invoke the Packer build. This setup is self-contained, so you can adjust the parameters manually in `template.json` or the other resources and / or even copy it to a different machine and simply invoke `packer build template.json` there. Most of the time though, you just simply want to build as it is, as the templates are already preconfigured with some reasonable defaults. This can be done of course with the build script as well:
 
@@ -426,7 +426,7 @@ Omitting this parameter will apply the command to all the templates, so the foll
 $ dotnet cake --target=clean
 ```
 
-> **Note** The `clean` command cleans up dependencies recursively, including the eventually imported Vagrant boxes and virtual machines created using the `test` command.  
+> **Note** The `clean` command cleans up dependencies recursively, including the eventually imported Vagrant boxes and virtual machines created using the `test` command.
 
 [Cleaning up]: #cleaning-up
 
@@ -444,8 +444,18 @@ Feedback, [issues] or [pull requests] are welcome and are greatly appreciated. C
 
 [Issues]: https://github.com/gusztavvargadr/packer/issues/
 [Pull requests]: https://github.com/gusztavvargadr/packer/pulls/
-[Milestones]: https://github.com/gusztavvargadr/packer/milestones/ 
+[Milestones]: https://github.com/gusztavvargadr/packer/milestones/
 
+## Update for French Version (WIP)
+
+- Install [ADK](https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install) (necessary to build on a Windows box)
+- Add to PATH environment variable C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86\Oscdimg
+- Set Packer Cache Dir (to avoid downloading the same iso for multiple ): `$env:PACKER_CACHE_DIR="C:/packer/"`
+
+```powershell
+# To create Vagrant box for Hyper-V :
+dotnet cake --target=rebuild --configuration=ws2019sfrca-hyperv-vagrant --verbosity=verbose
+```
 ## Resources
 
 This repository could not exist without the following great technologies:

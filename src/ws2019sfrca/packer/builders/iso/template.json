@@ -1,0 +1,7 @@
+{
+  "variables": {
+    "iso_url_local": "{{user `download_directory`}}/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_fr-fr_1.iso",
+    "iso_url_remote": "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_fr-fr_1.iso",
+    "iso_checksum": "sha256:3214bb306884cbb0242117343dd4f0606c6a22b5600e5514e1447a11a29379ae"
+  }
+}

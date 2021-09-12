@@ -14,7 +14,7 @@ Vagrant.configure('2') do |config|
   end
 
   config.vm.provider 'hyperv' do |p, override|
-    p.enable_virtualization_extensions = true
+    p.enable_virtualization_extensions = false # Doesn't work with Ryzen processor & Windows 10
 
     network_bridge = ENV['VAGRANT_HYPERV_NETWORK_BRIDGE'] || 'Default Switch'
     override.vm.network 'public_network', bridge: network_bridge

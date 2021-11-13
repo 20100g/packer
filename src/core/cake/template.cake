@@ -3,9 +3,9 @@
 #load "./provisioner.cake"
 #load "./postprocessor.cake"
 
+const string vagrantUser = "vgiroux"; // gusztavvargadr
 class PackerTemplate {
   public static string BuildDirectory { get; set; }
-
   public string Name { get; set; }
   public string Type { get; set; }
   public string FullName { get { return Name + "-" + Type; } }
@@ -17,7 +17,7 @@ class PackerTemplate {
   public string GroupName { get; set; }
   public string GroupVersion { get; set; }
 
-  public bool IsMatching(string name) {
+    public bool IsMatching(string name) {
     return string.IsNullOrEmpty(name) || FullName.Contains(name);
   }
 
@@ -107,7 +107,7 @@ void PackerTemplate_Test(PackerTemplate template) {
 
   var provider = template.Type.Split('-')[0];
   var vmName = $"{template.Name}-build";
-  var boxName = $"gusztavvargadr/{template.Name}-build";
+  var boxName = $"{vagrantUser}/{template.Name}-build";
   var boxUrl = $"file://{template.GetBuildDirectory()}/output/package/vagrant.box";
 
   PackerTemplate_Vagrant(template, $"up {vmName} --provider {provider}", vmName, boxName, boxUrl);
@@ -137,10 +137,11 @@ void PackerTemplate_Publish(PackerTemplate template) {
   }
 
   try {
+
     PackerTemplate_Vagrant(template, "cloud publish --force"
       + $" --checksum-type sha256"
       + $" --checksum {boxChecksum}"
-      + $" gusztavvargadr/{template.GroupName}"
+      + $" {vagrantUser}/{template.GroupName}"
       + $" {template.GroupVersion}"
       + $" {provider}"
       + $" {template.GetBuildDirectory()}/output/package/vagrant.box"
@@ -159,8 +160,8 @@ void PackerTemplate_Download(PackerTemplate template) {
 
   var provider = template.Type.Split('-')[0];
   var vmName = $"{template.Name}-publish";
-  var boxName = $"gusztavvargadr/{template.GroupName}-publish";
-  var boxUrl = $"https://vagrantcloud.com/gusztavvargadr/boxes/{template.GroupName}/versions/{template.GroupVersion}/providers/{provider}.box";
+  var boxName = $"{vagrantUser}/{template.GroupName}-publish";
+  var boxUrl = $"https://vagrantcloud.com/{vagrantUser}/boxes/{template.GroupName}/versions/{template.GroupVersion}/providers/{provider}.box";
 
   var downloadWaitMinutes = new [] { 0, 1, 2, 5 };
   var downloadSucceeded = false;
@@ -202,7 +203,7 @@ void PackerTemplate_Clean(PackerTemplate template) {
 
   try {
     var vmName = $"{template.Name}-build";
-    var boxName = $"gusztavvargadr/{template.Name}-build";
+    var boxName = $"{vagrantUser}/{template.Name}-build";
 
     PackerTemplate_Vagrant(template, $"destroy {vmName} --force", vmName, boxName);
     PackerTemplate_Vagrant(template, $"box remove {boxName} --provider {provider}");
@@ -212,7 +213,7 @@ void PackerTemplate_Clean(PackerTemplate template) {
 
   try {
     var vmName = $"{template.Name}-publish";
-    var boxName = $"gusztavvargadr/{template.GroupName}-publish";
+    var boxName = $"{vagrantUser}/{template.GroupName}-publish";
 
     PackerTemplate_Vagrant(template, $"destroy {vmName} --force", vmName, boxName);
     PackerTemplate_Vagrant(template, $"box remove {boxName} --provider {provider}");

@@ -1,0 +1,13 @@
+{
+  "provisioners": [
+    {
+      "type": "windows-update",
+      "filters": [
+        "include:$true"
+        ],
+        "search_criteria": "IsInstalled=0",
+        "update_limit": 1000,
+        "max_retries": 5
+    }
+  ]
+}

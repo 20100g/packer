@@ -446,16 +446,43 @@ Feedback, [issues] or [pull requests] are welcome and are greatly appreciated. C
 [Pull requests]: https://github.com/gusztavvargadr/packer/pulls/
 [Milestones]: https://github.com/gusztavvargadr/packer/milestones/
 
-## Update for French Version (WIP)
+## Changes
 
-- Install [ADK](https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install) (necessary to build on a Windows box)
-- Add to PATH environment variable C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86\Oscdimg
-- Set Packer Cache Dir (to avoid downloading the same iso for multiple ): `$env:PACKER_CACHE_DIR="C:/packer/"`
+ Some changes have been made to the original repo:
+  - Remove any Chef dependencies (plan to use Ansible for any configuration management)
+  - Addition of French Windows install
 
+### Steps
+- Install [ADK](https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install) (necessary to build images on a Windows box)
+- Add `C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86\Oscdimg` to PATH environment variable
+- Install windows-update provisioner plugin (replaces Chef provisioning)
+ ```powershell
+ $zipFile="packer-provisioner-windows-update_0.11.0_windows_amd64.zip"
+ Invoke-WebRequest https://github.com/rgl/packer-plugin-windows-update/releases/download/v0.11.0/$zipFile -OutFile ~/Downloads/$zipFile
+ Expand-Archive -Path ~/Downloads/$zipFile -DestinationPath $env:APPDATA\packer.d\plugins\ -Force
+ ```
+- Set the Packer Cache Dir (to avoid downloading the same iso multiple times ): `$env:PACKER_CACHE_DIR="C:/packer/"`
+
+To create Vagrant box for Hyper-V :
 ```powershell
-# To create Vagrant box for Hyper-V :
+
 dotnet cake --target=rebuild --configuration=ws2019sfrca-hyperv-vagrant --verbosity=verbose
 ```
+
+To simply add Vagrant box locally :
+```shell
+vagrant box add  windows-server-standard-fr  .\build\ws2019sfrca\hyperv-vagrant\output\package\vagrant.box --force
+```
+To publish box to Vagrant Cloud :
+```
+dotnet cake --target=publish --configuration=ws2019sfrca-hyperv-vagrant --verbosity=verbose
+```
+
+
+### Issues
+
+This repo hasn't been converted to the new packer HCL2 syntax. Newer version of plugins (e.g. windows-update) and don't seem to be supported without this conversion.
+
 ## Resources
 
 This repository could not exist without the following great technologies:
@@ -470,6 +497,7 @@ This repository could not exist without the following great technologies:
 
 This repository borrows awesome ideas and solutions from the following sources:
 
+- [Gusztáv Varga]
 - [Matt Wrock]
 - [Jacqueline]
 - [Joe Fitzgerald]
@@ -477,7 +505,7 @@ This repository borrows awesome ideas and solutions from the following sources:
 - [Bento]
 
 [Resources]: #resources
-
+[Gusztáv Varga]: https://github.com/gusztavvargadr/packer
 [Matt Wrock]: https://github.com/mwrock/packer-templates/
 [Jacqueline]: https://github.com/jacqinthebox/packer-templates/
 [Joe Fitzgerald]: https://github.com/joefitzgerald/packer-windows/

@@ -36,7 +36,7 @@ IEnumerable<PackerTemplate> PackerTemplates_CreateWindows(string name, string gr
     name,
     "hyperv-core",
     new [] { PackerBuilder_Create(parents == null ? "hyperv-iso" : "hyperv-vmcx") },
-    null, //new [] { PackerProvisioner_Create("chef") },
+    new [] { PackerProvisioner_Create("windows-update") },
     new [] { PackerPostProcessor_Create("manifest") },
     parents != null ? parents.First(item => item.IsMatching("hyperv-core")) : null
   );
@@ -44,7 +44,7 @@ IEnumerable<PackerTemplate> PackerTemplates_CreateWindows(string name, string gr
     name,
     "hyperv-vagrant",
     new [] { PackerBuilder_Create("hyperv-vmcx") },
-    new [] { PackerProvisioner_Create("vagrant") },
+    new [] { PackerProvisioner_Create("windows-update"), PackerProvisioner_Create("vagrant") },
     new [] { PackerPostProcessor_Create("vagrant-hyperv") },
     hyperVCore,
     groupName,

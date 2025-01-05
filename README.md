@@ -453,13 +453,13 @@ Feedback, [issues] or [pull requests] are welcome and are greatly appreciated. C
   - Addition of French Windows install
 
 ### Steps
+
 - Install [ADK](https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install) (necessary to build images on a Windows box)
 - Add `C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86\Oscdimg` to PATH environment variable
-- Install windows-update provisioner plugin (replaces Chef provisioning)
+- Install hyperv and windows-update provisioner plugins (replaces Chef provisioning)
  ```powershell
- $zipFile="packer-provisioner-windows-update_0.11.0_windows_amd64.zip"
- Invoke-WebRequest https://github.com/rgl/packer-plugin-windows-update/releases/download/v0.11.0/$zipFile -OutFile ~/Downloads/$zipFile
- Expand-Archive -Path ~/Downloads/$zipFile -DestinationPath $env:APPDATA\packer.d\plugins\ -Force
+packer plugins install github.com/hashicorp/hyperv
+packer plugins install github.com/rgl/windows-update
  ```
 - Set the Packer Cache Dir (to avoid downloading the same iso multiple times ): `$env:PACKER_CACHE_DIR="C:/packer/"`
 

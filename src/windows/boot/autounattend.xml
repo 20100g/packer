@@ -2,14 +2,22 @@
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
     <settings pass="windowsPE">
         <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+%{ for ui_language in compact([lookup(boot, "ui_language", "en-US")]) ~}
             <SetupUILanguage>
-                <UILanguage>en-US</UILanguage>
+                <UILanguage>${ui_language}</UILanguage>
             </SetupUILanguage>
+%{ endfor ~}
             <InputLocale>en-US</InputLocale>
-            <SystemLocale>en-US</SystemLocale>
-            <UILanguage>en-US</UILanguage>
-            <UILanguageFallback>en-US</UILanguageFallback>
-            <UserLocale>en-US</UserLocale>
+%{ for system_locale in compact([lookup(boot, "system_locale", "en-US")]) ~}
+            <SystemLocale>${system_locale}</SystemLocale>
+%{ endfor ~}
+%{ for ui_language in compact([lookup(boot, "ui_language", "en-US")]) ~}
+            <UILanguage>${ui_language}</UILanguage>
+%{ endfor ~}
+%{ for system_locale in compact([lookup(boot, "system_locale", "en-US")]) ~}
+            <UILanguageFallback>${system_locale}</UILanguageFallback>
+            <UserLocale>${system_locale}</UserLocale>
+%{ endfor ~}
         </component>
         <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 %{ for setup_script in compact([lookup(boot, "boot_setup_script", "")]) ~}
@@ -96,7 +104,7 @@
                 </ProductKey>
                 <AcceptEula>true</AcceptEula>
                 <FullName>Administrator</FullName>
-                <Organization>gusztavvargadr</Organization>
+                <Organization>vgiroux</Organization>
             </UserData>
         </component>
     </settings>
@@ -110,9 +118,9 @@
             <OEMInformation>
                 <HelpCustomized>false</HelpCustomized>
             </OEMInformation>
-            <ComputerName/>
-            <TimeZone>UTC</TimeZone>
-            <RegisteredOwner/>
+            <ComputerName />
+            <TimeZone>Eastern Standard Time</TimeZone>
+            <RegisteredOwner />
         </component>
         <component name="Microsoft-Windows-ServerManager-SvrMgrNc" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <DoNotOpenServerManagerAtLogon>true</DoNotOpenServerManagerAtLogon>
@@ -145,7 +153,7 @@
                     <PlainText>true</PlainText>
                 </AdministratorPassword>
             </UserAccounts>
-            <RegisteredOwner/>
+            <RegisteredOwner />
             <AutoLogon>
                 <Password>
                     <Value>Packer42-</Value>
@@ -166,10 +174,16 @@
         </component>
         <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <InputLocale>en-US</InputLocale>
-            <SystemLocale>en-US</SystemLocale>
-            <UILanguage>en-US</UILanguage>
-            <UILanguageFallback>en-US</UILanguageFallback>
-            <UserLocale>en-US</UserLocale>
+%{ for system_locale in compact([lookup(boot, "system_locale", "en-US")]) ~}
+            <SystemLocale>${system_locale}</SystemLocale>
+%{ endfor ~}
+%{ for ui_language in compact([lookup(boot, "ui_language", "en-US")]) ~}
+            <UILanguage>${ui_language}</UILanguage>
+%{ endfor ~}
+%{ for system_locale in compact([lookup(boot, "system_locale", "en-US")]) ~}
+            <UILanguageFallback>${system_locale}</UILanguageFallback>
+            <UserLocale>${system_locale}</UserLocale>
+%{ endfor ~}
         </component>
     </settings>
 </unattend>

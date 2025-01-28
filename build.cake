@@ -1,7 +1,7 @@
 var configuration = Argument("configuration", string.Empty);
 var target = Argument("target", "default");
 
-var author = Argument("author", "gusztavvargadr");
+var author = Argument("author", "vgiroux");
 var version = Argument("version", "2409");
 
 var configurationParts = configuration.Split('/', StringSplitOptions.RemoveEmptyEntries);

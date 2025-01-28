@@ -51,66 +51,16 @@ build {
 
   sources = ["null.core"]
 
-  provisioner "shell-local" {
-    inline = [
-      "chef install --chef-license accept-silent",
-      "chef update --attributes",
-      "chef export ${local.artifacts_directory}/chef --force"
-    ]
-  }
 }
 
-locals {
-  chef_destination         = "C:/Windows/Temp/chef/"
-  chef_max_retries         = 10
-  chef_attributes          = lookup(local.image_options.native, "chef_attributes", "")
-  chef_keep                = lookup(local.image_options.native, "chef_keep", "false")
-}
 
 build {
   name = "native-build"
 
   sources = local.native_build ? (local.native_iso ? compact([lookup(local.native_iso_sources, local.image_provider, "")]) : compact([lookup(local.native_import_sources, local.image_provider, "")])) : ["null.core"]
 
-  provisioner "powershell" {
-    script = "${path.root}/chef/initialize.ps1"
-
-    elevated_user     = local.communicator.username
-    elevated_password = local.communicator.password
-  }
-
-  provisioner "file" {
-    source      = "${local.artifacts_directory}/chef/"
-    destination = local.chef_destination
-  }
-
-  provisioner "file" {
-    sources     = fileset(path.cwd, "attributes.*.json")
-    destination = local.chef_destination
-  }
-
-  provisioner "powershell" {
-    script              = "${path.root}/chef/apply.ps1"
-    max_retries         = local.chef_max_retries
-    pause_before        = "120s"
-
-    env = {
-      CHEF_ATTRIBUTES = local.chef_attributes
-    }
-
-    elevated_user     = local.communicator.username
-    elevated_password = local.communicator.password
-  }
-
-  provisioner "powershell" {
-    script = "${path.root}/chef/cleanup.ps1"
-
-    env = {
-      CHEF_KEEP = local.chef_keep
-    }
-
-    elevated_user     = local.communicator.username
-    elevated_password = local.communicator.password
+  provisioner "windows-update" {
+    search_criteria = "IsInstalled=0"
   }
 
   post-processor "manifest" {

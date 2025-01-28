@@ -26,6 +26,35 @@ images = {
     }
   }
 
+  "2022-standard-frfr" = {
+    core = {
+      image_description = "Windows Server 2022 Standard fr-fr"
+      image_version     = "2102.0"
+    }
+
+    native = {
+      source_iso_url_local  = "SERVER_EVAL_x64FRE_fr-fr.iso"
+      source_iso_url_remote = "https://software-static.download.prss.microsoft.com/sg/download/888969d5-f34g-4e03-ac9d-1f9786c66749/SERVER_EVAL_x64FRE_fr-fr.iso"
+      source_iso_checksum   = "sha256:a32de43bd5201f3665d323d3f384c6eec4091e8b7eb4e7f35ae18455274e3ee8"
+
+      boot_image_name = "Windows Server 2022 SERVERSTANDARD"
+      system_locale = "fr-CA"
+      ui_language = "fr-FR"
+    }
+
+    vagrant = {
+      box_alias = "windows-server-fr"
+    }
+
+    virtualbox = {
+      guest_os_type = "Windows2022_64"
+    }
+
+    vmware = {
+      guest_os_type = "windows2019srvnext-64"
+    }
+  }
+
   "2022-standard-core" = {
     core = {
       image_description = "Windows Server 2022 Standard Core"
@@ -65,7 +94,33 @@ images = {
       source_iso_checksum   = "sha256:549bca46c055157291be6c22a3aaaed8330e78ef4382c99ee82c896426a1cee1"
 
       boot_image_name         = "Windows Server 2019 SERVERSTANDARD"
-      boot_chocolatey_version = "1.4.0"
+      boot_chocolatey_version = "1.4.1"
+    }
+
+    virtualbox = {
+      guest_os_type = "Windows2019_64"
+    }
+
+    vmware = {
+      guest_os_type = "windows2019srv-64"
+    }
+  }
+
+"2019-standard-frfr" = {
+    core = {
+      image_description = "Windows Server 2019 Standard"
+      image_version     = "1809.0"
+    }
+
+    native = {
+      source_iso_url_local  = "17763.3650.221105-1748.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_fr-fr.iso"
+      source_iso_url_remote = "https://software-static.download.prss.microsoft.com/dbazure/988969d5-f34g-4e03-ac9d-1f9786c66749/17763.3650.221105-1748.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_fr-fr.iso"
+      source_iso_checksum   = "sha256:6a2b373321408f8509151b00daf07bea4fe7fd7d7c3435415b2d0cc0117a11ff"
+
+      boot_image_name         = "Windows Server 2019 SERVERSTANDARD"
+      boot_chocolatey_version = "1.4.1"
+      system_locale = "fr-CA"
+      ui_language = "fr-FR"
     }
 
     virtualbox = {
@@ -89,7 +144,7 @@ images = {
       source_iso_checksum   = "sha256:549bca46c055157291be6c22a3aaaed8330e78ef4382c99ee82c896426a1cee1"
 
       boot_image_name         = "Windows Server 2019 SERVERSTANDARDCORE"
-      boot_chocolatey_version = "1.4.0"
+      boot_chocolatey_version = "1.4.1"
     }
 
     virtualbox = {

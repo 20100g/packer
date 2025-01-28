@@ -4,6 +4,10 @@ packer {
       version = "~> 1.1.3"
       source  = "github.com/hashicorp/hyperv"
     }
+    windows-update = {
+      version = "0.16.8"
+      source  = "github.com/rgl/windows-update"
+    }
   }
 }
 
@@ -15,7 +19,7 @@ variable "hyperv_switch" {
 locals {
   hyperv_source_options = {
     generation                       = 2
-    configuration_version            = "9.0"
+    configuration_version            = "11.0"
     enable_virtualization_extensions = false
     enable_dynamic_memory            = false
     enable_secure_boot               = true

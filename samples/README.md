@@ -147,7 +147,7 @@ ws2022s-iis-hyperv-vagrant: Info
 You can filter this further to list only the templates for a given virtual machine image type. For example, to list the templates based on the `Windows Server 2022 Standard` image, invoke the `info` command with the `ws2022s` argument:
 
 ```shell
-$ dotnet cake [--target=info] --configuration=ws2022s
+$ dotnet cake --target=info --configuration=windows-server/2022-standard-frfr/hyperv/native
 ```
 
 You can use this filtering with all the `dotnet cake` commands below as well. It selects all the templates which contain the specified argument as a substring, so you can filter for components (`ws2022s`, `w1022h2e`, `iis`, etc.) or providers (`virtualbox`, `vmware`, `hyperv`) easily.  

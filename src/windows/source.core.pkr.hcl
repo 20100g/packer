@@ -8,7 +8,7 @@ locals {
 
     cpus      = 4
     memory    = 8192
-    disk_size = 130048
+    disk_size = 65024
 
     boot_wait        = "1s"
     shutdown_timeout = "5m"

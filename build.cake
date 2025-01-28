@@ -2,7 +2,7 @@
 
 var target = Argument("target", "default");
 var configuration = Argument("configuration", string.Empty);
-var version = "2108";
+var version = "3636";
 
 var buildDirectory = Argument("build-directory", "./build");
 PackerTemplate.BuildDirectory = buildDirectory;
@@ -98,7 +98,13 @@ PackerTemplate.BuildDirectory = buildDirectory;
 var ws2019sfrca = PackerTemplates_CreateWindows(
   "ws2019sfrca",
   "windows-server-standard-fr",
-  $"1809.0.{version}"
+  $"2019.0.{version}"
+);
+
+var ws2022sfrca = PackerTemplates_CreateWindows(
+  "ws2022sfrca",
+  "windows-server-standard-fr",
+  $"10.0.19041.3636"
 );
 // var ws2019s_de = PackerTemplates_CreateWindows(
 //   "ws2019s-de",

@@ -3,7 +3,7 @@
 #load "./provisioner.cake"
 #load "./postprocessor.cake"
 
-const string vagrantUser = "vgiroux"; // gusztavvargadr
+const string vagrantUser = "20100g"; // gusztavvargadr
 class PackerTemplate {
   public static string BuildDirectory { get; set; }
   public string Name { get; set; }
@@ -137,7 +137,6 @@ void PackerTemplate_Publish(PackerTemplate template) {
   }
 
   try {
-
     PackerTemplate_Vagrant(template, "cloud publish --force"
       + $" --checksum-type sha256"
       + $" --checksum {boxChecksum}"
